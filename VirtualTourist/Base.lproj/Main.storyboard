@@ -64,10 +64,10 @@
             </objects>
             <point key="canvasLocation" x="1096" y="1090"/>
         </scene>
-        <!--Photo View Controller-->
+        <!--Photo Album View Controller-->
         <scene sceneID="SWD-2k-cx4">
             <objects>
-                <viewController id="aDO-Rc-s8y" customClass="PhotoViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="aDO-Rc-s8y" customClass="PhotoAlbumViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hAB-7k-rcE"/>
                         <viewControllerLayoutGuide type="bottom" id="MJJ-eA-Gp0"/>

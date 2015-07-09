@@ -13,11 +13,12 @@
 		534C5EC31B4DF20C00776625 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 534C5EC21B4DF20C00776625 /* Images.xcassets */; };
 		534C5EC61B4DF20C00776625 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 534C5EC41B4DF20C00776625 /* LaunchScreen.xib */; };
 		534C5ED21B4DF20C00776625 /* VirtualTouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5ED11B4DF20C00776625 /* VirtualTouristTests.swift */; };
-		534C5EDC1B4DF8B700776625 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EDB1B4DF8B700776625 /* PhotoViewController.swift */; };
+		534C5EDC1B4DF8B700776625 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EDB1B4DF8B700776625 /* PhotoAlbumViewController.swift */; };
 		534C5EDE1B4E00CA00776625 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EDD1B4E00CA00776625 /* PhotoCollectionViewCell.swift */; };
 		534C5EE11B4E04BB00776625 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EDF1B4E04BB00776625 /* Model.xcdatamodeld */; };
 		534C5EE31B4E06A900776625 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EE21B4E06A900776625 /* Pin.swift */; };
 		534C5EE51B4E06CF00776625 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EE41B4E06CF00776625 /* Photo.swift */; };
+		534C5EE71B4E145D00776625 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EE61B4E145D00776625 /* APIClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,11 +42,12 @@
 		534C5ECB1B4DF20C00776625 /* VirtualTouristTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualTouristTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		534C5ED01B4DF20C00776625 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		534C5ED11B4DF20C00776625 /* VirtualTouristTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTouristTests.swift; sourceTree = "<group>"; };
-		534C5EDB1B4DF8B700776625 /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		534C5EDB1B4DF8B700776625 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		534C5EDD1B4E00CA00776625 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		534C5EE01B4E04BB00776625 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		534C5EE21B4E06A900776625 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		534C5EE41B4E06CF00776625 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		534C5EE61B4E145D00776625 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,11 +90,12 @@
 			isa = PBXGroup;
 			children = (
 				534C5EBB1B4DF20C00776625 /* AppDelegate.swift */,
+				534C5EE61B4E145D00776625 /* APIClient.swift */,
 				534C5EE21B4E06A900776625 /* Pin.swift */,
 				534C5EE41B4E06CF00776625 /* Photo.swift */,
 				534C5EDF1B4E04BB00776625 /* Model.xcdatamodeld */,
 				534C5EBD1B4DF20C00776625 /* MapViewController.swift */,
-				534C5EDB1B4DF8B700776625 /* PhotoViewController.swift */,
+				534C5EDB1B4DF8B700776625 /* PhotoAlbumViewController.swift */,
 				534C5EDD1B4E00CA00776625 /* PhotoCollectionViewCell.swift */,
 				534C5EBF1B4DF20C00776625 /* Main.storyboard */,
 				534C5EC21B4DF20C00776625 /* Images.xcassets */,
@@ -230,10 +233,11 @@
 				534C5EBE1B4DF20C00776625 /* MapViewController.swift in Sources */,
 				534C5EDE1B4E00CA00776625 /* PhotoCollectionViewCell.swift in Sources */,
 				534C5EE11B4E04BB00776625 /* Model.xcdatamodeld in Sources */,
+				534C5EE71B4E145D00776625 /* APIClient.swift in Sources */,
 				534C5EE31B4E06A900776625 /* Pin.swift in Sources */,
 				534C5EE51B4E06CF00776625 /* Photo.swift in Sources */,
 				534C5EBC1B4DF20C00776625 /* AppDelegate.swift in Sources */,
-				534C5EDC1B4DF8B700776625 /* PhotoViewController.swift in Sources */,
+				534C5EDC1B4DF8B700776625 /* PhotoAlbumViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
