@@ -59,7 +59,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return coordinator
     }()
     
-    
     lazy var managedObjectModel: NSManagedObjectModel = {
         let url = NSBundle.mainBundle().URLForResource("Model", withExtension: "xcdatamodeld")!
         let model = NSManagedObjectModel(contentsOfURL: url)!
@@ -71,6 +70,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
     }()
     
-    
+    func saveContext() {
+        var error: NSError? = nil
+        if managedObjectContext.hasChanges && managedObjectContext.save(&error) {
+            abort()
+        }
+    }
 }
 

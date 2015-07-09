@@ -10,6 +10,21 @@ import Foundation
 import CoreData
 
 @objc class Photo: NSManagedObject {
-    @NSManaged var imageData: NSData
-    @NSManaged var pin: Pin
+    @NSManaged var imagePath: String
+    @NSManaged var pin: Pin?
+    
+    struct Keys {
+        static let imagePath = "imagePath"
+        static let pin = "pin"
+    }
+    
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
+    init(dictionary: [String:AnyObject], context: NSManagedObjectContext) {
+        let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+        imagePath = dictionary[Keys.imagePath] as! String
+    }
 }
