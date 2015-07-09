@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    private let sqlStore = "VirtualTourist.sqlite"
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -40,7 +42,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        let context = NSManagedObjectContext()
+        context.persistentStoreCoordinator = self.persistentStoreCoordinator
+        return context
+    }()
+    
+    lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(self.sqlStore)
+        let store = coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: nil)
+        if store == nil {
+            abort()
+        }
+        return coordinator
+    }()
+    
+    
+    lazy var managedObjectModel: NSManagedObjectModel = {
+        let url = NSBundle.mainBundle().URLForResource("Model", withExtension: "xcdatamodeld")!
+        let model = NSManagedObjectModel(contentsOfURL: url)!
+        return model
+    }()
+    
+    lazy var applicationDocumentsDirectory: NSURL = {
+        let fileManager = NSFileManager.defaultManager()
+        return fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
+    }()
+    
+    
 }
 
