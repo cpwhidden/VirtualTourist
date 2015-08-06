@@ -12,15 +12,39 @@ import MapKit
 class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var noImageLabel: UILabel!
     
     let spacing: CGFloat = 6.0
     let columns = 3
+    var pinAnnotation: PinAnnotation?
+    var photos: [Photo]?
+    var photoStatus = PhotosStatus.Unknown
+    
+    enum PhotosStatus {
+        case Unknown
+        case Some(Int)
+        case None
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
         // Do any additional setup after loading the view.
+        
+        if let pinAnnotation = pinAnnotation {
+            let region = MKCoordinateRegionMake(pinAnnotation.coordinate, MKCoordinateSpanMake(0.4, 0.4))
+            mapView.setRegion(region, animated: true)
+            mapView.addAnnotation(pinAnnotation)
+            photos = pinAnnotation.pin.pictures
+            if photos!.count == 0 {
+                
+                // Download urls for pin
+
+            }
+        }
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,7 +58,16 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        switch photoStatus {
+        case .Unknown:
+            noImageLabel.hidden = false
+            return 0
+        case .None:
+            noImageLabel.hidden = true
+            return 0
+        case let .Some(i):
+            return i
+        }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
