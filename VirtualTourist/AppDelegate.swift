@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let url = NSBundle.mainBundle().URLForResource("Model", withExtension: "xcdatamodeld")!
+        let url = NSBundle.mainBundle().URLForResource("Model", withExtension: "momd")!
         let model = NSManagedObjectModel(contentsOfURL: url)!
         return model
     }()
@@ -78,3 +78,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+func sharedContext() -> NSManagedObjectContext {
+    return (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+}
