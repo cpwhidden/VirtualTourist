@@ -15,9 +15,7 @@ class APIClient: NSObject {
     
     private override init() {}
     
-    func taskForURLsForPin(pin: Pin, var parameters: [String:String], completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
-        parameters[Keys.apiKey] = APIConstants.apiKey
-        
+    func taskForURLsWithParameters(var parameters: [String:String], completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
         let urlString = APIConstants.baseURL + escapedParameters(parameters)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
@@ -32,7 +30,7 @@ class APIClient: NSObject {
                 if let results = json["photos"] as? [String:AnyObject],
                     let photos = results["photo"] as? [[String:AnyObject]] {
                         let urls = map(photos) { (photo: [String:AnyObject]) -> NSURL in
-                            let urlString = photo[APIConstants.extras] as! String
+                            let urlString = photo[APIConstants.urlExtra] as! String
                             return NSURL(string: urlString)!
                         }
                         completionHandler(urls: urls, error: nil)
@@ -43,6 +41,22 @@ class APIClient: NSObject {
         }
         task.resume()
         return task
+    }
+    
+    func taskForURLsWithPinAnnotation(pinAnnotation: PinAnnotation, completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
+        let pin = pinAnnotation.pin
+        
+        let params = [
+            "method" : SearchMethod.searchPhotos,
+            "api_key" : APIConstants.apiKey,
+            "extras" : APIConstants.urlExtra,
+            "format" : APIConstants.jsonFormat,
+            "nojsoncallback" : "1",
+            "lat" : pinAnnotation.coordinate.latitude.description,
+            "long" : pinAnnotation.coordinate.longitude.description
+        ]
+        
+        return taskForURLsWithParameters(params, completionHandler: completionHandler)
     }
     
     func downloadURL(url: NSURL, forPin pin: Pin, completionHandler: (photo: Photo?, error: NSError?)->Void) {
@@ -71,16 +85,16 @@ class APIClient: NSObject {
     }
 }
 
-struct Keys {
-    static let apiKey = "api_key"
-}
-
 struct APIConstants {
     static let apiKey = "c32f8da39c261a42e12e77299d4179db"
     static let baseURL = "https://api.flickr.com/services/rest/"
-    static let extras = "url_m"
+    static let urlExtra = "url_m"
+    static let jsonFormat = "json"
 }
 
-struct Methods {
+struct SearchMethod {
     static let searchPhotos = "flickr.photos.search"
+    static let maxReturnedPhotos = 4000
+    static let perPage = 21
+    
 }
