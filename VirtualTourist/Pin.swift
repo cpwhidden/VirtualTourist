@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc class Pin: NSManagedObject {
+@objc(Pin)
+
+class Pin: NSManagedObject {
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
     @NSManaged var pictures: [Photo]?
@@ -30,5 +32,6 @@ import CoreData
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         latitude = dictionary[Keys.latitude] as! Double
         longitude = dictionary[Keys.longitude] as! Double
+        context.save(nil)
     }
 }

@@ -9,7 +9,9 @@
 import Foundation
 import CoreData
 
-@objc class Photo: NSManagedObject {
+@objc(Photo)
+
+class Photo: NSManagedObject {
     @NSManaged var imagePath: String
     @NSManaged var pin: Pin?
     
@@ -23,8 +25,13 @@ import CoreData
     }
     
     init(dictionary: [String:AnyObject], context: NSManagedObjectContext) {
-        let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
+        let entity = NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         imagePath = dictionary[Keys.imagePath] as! String
+        context.save(nil)
+    }
+    
+    deinit {
+        // TODO: remove file at imagePath
     }
 }
