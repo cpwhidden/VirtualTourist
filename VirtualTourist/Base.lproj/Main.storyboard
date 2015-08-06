@@ -18,6 +18,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Pq1-a1-SpW">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="cSv-zt-oP0" appends="YES" id="Mst-hR-wxy"/>
+                                </connections>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pins to Delete" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzf-3X-PFw">
                                 <rect key="frame" x="0.0" y="540" width="600" height="60"/>
@@ -34,7 +38,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Pq1-a1-SpW" secondAttribute="trailing" id="6MX-gy-bz0"/>
                             <constraint firstItem="Pq1-a1-SpW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="GZN-LZ-lIJ"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="fzf-3X-PFw" secondAttribute="bottom" id="IGN-NC-Bug"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="bottom" secondItem="fzf-3X-PFw" secondAttribute="bottom" id="IGN-NC-Bug"/>
                             <constraint firstItem="Pq1-a1-SpW" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="OHH-hK-qYQ"/>
                             <constraint firstItem="Pq1-a1-SpW" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="TEN-Hh-2aO"/>
                             <constraint firstItem="fzf-3X-PFw" firstAttribute="trailing" secondItem="Pq1-a1-SpW" secondAttribute="trailing" id="cwT-fj-n8f"/>
@@ -42,25 +46,24 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="p29-r3-6aZ">
-                        <barButtonItem key="leftBarButtonItem" title="Go" id="OII-TK-WrB">
-                            <connections>
-                                <segue destination="aDO-Rc-s8y" kind="show" id="Jdh-4i-i6j"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="DRt-sP-YoQ">
                             <connections>
-                                <action selector="beginEditing:" destination="BYZ-38-t0r" id="CuJ-kh-2y8"/>
+                                <action selector="toggleEdit:" destination="BYZ-38-t0r" id="n7k-tq-6xM"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="editButton" destination="DRt-sP-YoQ" id="by1-Zv-U8C"/>
+                        <outlet property="labelBottom" destination="IGN-NC-Bug" id="1Rx-zS-WNc"/>
+                        <outlet property="labelHeight" destination="jMO-2T-E5J" id="cN4-Ye-03n"/>
+                        <outlet property="longPressGestureRecognizer" destination="cSv-zt-oP0" id="GTr-yU-rJ6"/>
                         <outlet property="mapView" destination="Pq1-a1-SpW" id="O5j-NH-KPw"/>
                         <outlet property="tapToDeleteLabel" destination="fzf-3X-PFw" id="6Ok-Gz-ngK"/>
                         <segue destination="aDO-Rc-s8y" kind="show" identifier="PhotosForPin" id="naS-Os-obv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="cSv-zt-oP0"/>
             </objects>
             <point key="canvasLocation" x="1096" y="1090"/>
         </scene>
@@ -124,6 +127,12 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no images for this pin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0q5-1h-lXN">
+                                <rect key="frame" x="175" y="239" width="249" height="20.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -132,7 +141,9 @@
                             <constraint firstItem="gWc-tu-hjf" firstAttribute="leading" secondItem="whc-3m-Kiq" secondAttribute="leading" id="KYP-ah-GAG"/>
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="top" secondItem="hfI-OF-c4C" secondAttribute="bottom" id="TmI-ac-4lc"/>
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="bottom" secondItem="MJJ-eA-Gp0" secondAttribute="top" id="VX2-Eg-gtv"/>
+                            <constraint firstItem="whc-3m-Kiq" firstAttribute="top" secondItem="0q5-1h-lXN" secondAttribute="top" constant="-40" id="Zkk-hw-GHI"/>
                             <constraint firstItem="gWc-tu-hjf" firstAttribute="trailing" secondItem="whc-3m-Kiq" secondAttribute="trailing" id="aGm-ll-iXh"/>
+                            <constraint firstAttribute="centerX" secondItem="0q5-1h-lXN" secondAttribute="centerX" id="coH-KA-hH2"/>
                             <constraint firstItem="hfI-OF-c4C" firstAttribute="top" secondItem="hAB-7k-rcE" secondAttribute="bottom" id="hv3-pi-iv2"/>
                             <constraint firstItem="gWc-tu-hjf" firstAttribute="bottom" secondItem="MJJ-eA-Gp0" secondAttribute="top" id="ilP-hJ-vp5"/>
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="leading" secondItem="ml7-Dw-NcF" secondAttribute="leading" id="kPa-cc-bNL"/>
@@ -142,6 +153,7 @@
                     <connections>
                         <outlet property="collectionView" destination="whc-3m-Kiq" id="1v0-yl-sqt"/>
                         <outlet property="mapView" destination="hfI-OF-c4C" id="J1U-lf-EqG"/>
+                        <outlet property="noImageLabel" destination="0q5-1h-lXN" id="tKm-hB-U4f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G4l-Hj-kdB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -167,7 +179,4 @@
             <point key="canvasLocation" x="342" y="1090"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="naS-Os-obv"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -19,6 +19,7 @@
 		534C5EE31B4E06A900776625 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EE21B4E06A900776625 /* Pin.swift */; };
 		534C5EE51B4E06CF00776625 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EE41B4E06CF00776625 /* Photo.swift */; };
 		534C5EE71B4E145D00776625 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C5EE61B4E145D00776625 /* APIClient.swift */; };
+		53BF7D091B7307FE009FFE06 /* PinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BF7D081B7307FE009FFE06 /* PinAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		534C5EE21B4E06A900776625 /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		534C5EE41B4E06CF00776625 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		534C5EE61B4E145D00776625 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		53BF7D081B7307FE009FFE06 /* PinAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				534C5EE41B4E06CF00776625 /* Photo.swift */,
 				534C5EDF1B4E04BB00776625 /* Model.xcdatamodeld */,
 				534C5EBD1B4DF20C00776625 /* MapViewController.swift */,
+				53BF7D081B7307FE009FFE06 /* PinAnnotation.swift */,
 				534C5EDB1B4DF8B700776625 /* PhotoAlbumViewController.swift */,
 				534C5EDD1B4E00CA00776625 /* PhotoCollectionViewCell.swift */,
 				534C5EBF1B4DF20C00776625 /* Main.storyboard */,
@@ -237,6 +240,7 @@
 				534C5EE31B4E06A900776625 /* Pin.swift in Sources */,
 				534C5EE51B4E06CF00776625 /* Photo.swift in Sources */,
 				534C5EBC1B4DF20C00776625 /* AppDelegate.swift in Sources */,
+				53BF7D091B7307FE009FFE06 /* PinAnnotation.swift in Sources */,
 				534C5EDC1B4DF8B700776625 /* PhotoAlbumViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
