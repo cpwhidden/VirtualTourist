@@ -16,13 +16,13 @@ class APIClient: NSObject {
     private override init() {}
     
     func taskForURLsWithParameters(var parameters: [String:String], completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
-        let urlString = APIConstants.baseURL + escapedParameters(parameters)
+        let urlString = APIConstants.baseURL + "?" + escapedParameters(parameters)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if let error = error {
-                completionHandler(urls: [], error: error)
+                completionHandler(urls: nil, error: error)
             } else {
                 var jsonError: NSError? = nil
                 let json = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: &jsonError) as! NSDictionary
@@ -53,26 +53,26 @@ class APIClient: NSObject {
             "format" : APIConstants.jsonFormat,
             "nojsoncallback" : "1",
             "lat" : pinAnnotation.coordinate.latitude.description,
-            "long" : pinAnnotation.coordinate.longitude.description
+            "lon" : pinAnnotation.coordinate.longitude.description,
+            "radius" : "5",
+            "per_page" : SearchMethod.perPage.description
         ]
         
         return taskForURLsWithParameters(params, completionHandler: completionHandler)
     }
     
-    func downloadURL(url: NSURL, forPin pin: Pin, completionHandler: (photo: Photo?, error: NSError?)->Void) {
+    func downloadImageURL(url: NSURL, toPath path: String, completionHandler: (success: Bool, error: NSError?)->Void) {
         let request = NSURLRequest(URL: url)
         let task = NSURLSession.sharedSession().downloadTaskWithRequest(request) { url, response, error in
             if let error = error {
-                completionHandler(photo: nil, error: error)
+                completionHandler(success: false, error: error)
             } else {
                 let data = NSData(contentsOfURL: url)!
-                let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String + url.lastPathComponent!
                 data.writeToFile(path, atomically: true)
-                let dict = ["imagePath" : path, "pin" : pin]
-                let photo = Photo(dictionary: dict, context: self.sharedContext)
-                completionHandler(photo: photo, error: nil)
+                completionHandler(success: true, error: nil)
             }
         }
+        task.resume()
     }
     
     func escapedParameters(dictionary: [String:String]) -> String {

@@ -38,13 +38,43 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
             mapView.addAnnotation(pinAnnotation)
             photos = pinAnnotation.pin.pictures
             if photos!.count == 0 {
-                
-                // Download urls for pin
-
+                retrieveURLsForPinAnnotation(pinAnnotation)
             }
         }
-        
-        
+    }
+    
+    func retrieveURLsForPinAnnotation(pinAnnotation: PinAnnotation) {
+        APIClient.sharedClient.taskForURLsWithPinAnnotation(pinAnnotation) { urls, error in
+            if error != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.photoStatus = .None
+                    let alert = UIAlertView(title: "Could not retrieve photos", message: "Photos cannot be retrieved at this time", delegate: nil, cancelButtonTitle: "OK")
+                    alert.show()
+                    self.collectionView.reloadData()
+                }
+            } else {
+                var count = urls!.count
+                for (index, url) in enumerate(urls!) {
+                    let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String + pinAnnotation.pin.latitude.description + "-" + pinAnnotation.pin.longitude.description + "-" + url.lastPathComponent!
+                    let dict = ["imagePath" : path, "pin" : pinAnnotation.pin]
+                    let photo = Photo(dictionary: dict, context: sharedContext())
+                    APIClient.sharedClient.downloadImageURL(url, toPath: path) { success, error in
+                        if error != nil {
+                            count--
+                            sharedContext().deleteObject(photo)
+                        }
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue()) {
+                    if count > 0 {
+                        self.photoStatus = .Some(count)
+                    } else {
+                        self.photoStatus = .None
+                    }
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,7 +101,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("TestCell", forIndexPath: indexPath) as! UICollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! UICollectionViewCell
         return cell
     }
     
