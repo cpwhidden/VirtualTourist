@@ -33,6 +33,8 @@ class Photo: NSManagedObject {
     }
     
     deinit {
-        // TODO: remove file at imagePath
+        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
+        let fullPath = docPath + imagePath
+        NSFileManager.defaultManager().removeItemAtPath(fullPath, error: nil)
     }
 }

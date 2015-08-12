@@ -85,7 +85,7 @@
                                     <constraint firstAttribute="height" constant="135" id="dn2-WY-3Cs"/>
                                 </constraints>
                             </mapView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gWc-tu-hjf">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gWc-tu-hjf">
                                 <rect key="frame" x="0.0" y="556" width="600" height="44"/>
                                 <items>
                                     <barButtonItem systemItem="refresh" id="DeX-op-uMY"/>
@@ -93,7 +93,7 @@
                                     <barButtonItem systemItem="trash" id="lFM-CC-rVV"/>
                                 </items>
                             </toolbar>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="whc-3m-Kiq">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="whc-3m-Kiq">
                                 <rect key="frame" x="0.0" y="199" width="600" height="401"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uua-dE-J55">
@@ -150,6 +150,12 @@
                             <constraint firstAttribute="trailing" secondItem="hfI-OF-c4C" secondAttribute="trailing" id="mNy-ct-hON"/>
                         </constraints>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem systemItem="refresh" id="PeG-LD-K5c"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="qWR-eR-e9o"/>
+                        <barButtonItem enabled="NO" systemItem="trash" id="nym-cm-R9c"/>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="whc-3m-Kiq" id="1v0-yl-sqt"/>
                         <outlet property="mapView" destination="hfI-OF-c4C" id="J1U-lf-EqG"/>
