@@ -79,7 +79,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hfI-OF-c4C">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hfI-OF-c4C">
                                 <rect key="frame" x="0.0" y="64" width="600" height="135"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="135" id="dn2-WY-3Cs"/>
@@ -120,7 +120,7 @@
                                 </cells>
                             </collectionView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no images for this pin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0q5-1h-lXN">
-                                <rect key="frame" x="176" y="239" width="249" height="21"/>
+                                <rect key="frame" x="176.5" y="239" width="248.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -141,6 +141,9 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="L4S-0o-vzx">
+                                <rect key="frame" x="290" y="389.5" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -149,7 +152,9 @@
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="leading" secondItem="hfI-OF-c4C" secondAttribute="leading" id="DUA-HY-grm"/>
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="top" secondItem="hfI-OF-c4C" secondAttribute="bottom" id="IrI-r7-HDh"/>
                             <constraint firstItem="MJJ-eA-Gp0" firstAttribute="top" secondItem="I4k-Hm-X79" secondAttribute="bottom" id="Kwl-rD-Dz1"/>
+                            <constraint firstItem="L4S-0o-vzx" firstAttribute="centerY" secondItem="whc-3m-Kiq" secondAttribute="centerY" id="M8k-XH-NOz"/>
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="bottom" secondItem="MJJ-eA-Gp0" secondAttribute="top" id="Q07-ez-KNC"/>
+                            <constraint firstItem="L4S-0o-vzx" firstAttribute="centerX" secondItem="whc-3m-Kiq" secondAttribute="centerX" id="bMd-HB-sNl"/>
                             <constraint firstAttribute="centerX" secondItem="0q5-1h-lXN" secondAttribute="centerX" id="coH-KA-hH2"/>
                             <constraint firstItem="whc-3m-Kiq" firstAttribute="trailing" secondItem="hfI-OF-c4C" secondAttribute="trailing" id="dKh-qB-l7A"/>
                             <constraint firstItem="hfI-OF-c4C" firstAttribute="top" secondItem="hAB-7k-rcE" secondAttribute="bottom" id="hv3-pi-iv2"/>
@@ -163,6 +168,7 @@
                     </toolbarItems>
                     <connections>
                         <outlet property="collectionView" destination="whc-3m-Kiq" id="1v0-yl-sqt"/>
+                        <outlet property="incompleteActivityIndicator" destination="L4S-0o-vzx" id="sst-05-Zef"/>
                         <outlet property="mapView" destination="hfI-OF-c4C" id="J1U-lf-EqG"/>
                         <outlet property="noImageLabel" destination="0q5-1h-lXN" id="tKm-hB-U4f"/>
                         <outlet property="trashButton" destination="fAu-89-9MY" id="f7z-Wl-wpL"/>

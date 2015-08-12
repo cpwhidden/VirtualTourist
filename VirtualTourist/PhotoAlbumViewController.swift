@@ -15,6 +15,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var noImageLabel: UILabel!
     @IBOutlet weak var trashButton: UIBarButtonItem!
+    @IBOutlet weak var incompleteActivityIndicator: UIActivityIndicatorView!
     
     let spacing: CGFloat = 6.0
     let columns = 3
@@ -40,9 +41,14 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
             mapView.addAnnotation(pinAnnotation)
             photos = pinAnnotation.pin.pictures
             if photos!.count == 0 {
+                photoStatus = .Incomplete
+                incompleteActivityIndicator.startAnimating()
+                incompleteActivityIndicator.hidden = false
                 retrieveURLsForPinAnnotation(pinAnnotation)
             } else {
                 photoStatus = .Done
+                incompleteActivityIndicator.stopAnimating()
+                incompleteActivityIndicator.hidden = true
                 collectionView.reloadData()
             }
         }
@@ -54,7 +60,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                 dispatch_async(dispatch_get_main_queue()) {
                     let alert = UIAlertView(title: "Could not retrieve photos", message: "Photos cannot be retrieved at this time", delegate: nil, cancelButtonTitle: "OK")
                     alert.show()
-                    self.photoStatus = .Incomplete
+                    self.photoStatus = .Done
+                    self.incompleteActivityIndicator.stopAnimating()
+                    self.incompleteActivityIndicator.hidden = true
                     self.collectionView.reloadData()
                 }
             } else {
@@ -76,6 +84,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                 }
                 dispatch_async(dispatch_get_main_queue()) {
                     self.photoStatus = .Done
+                    self.incompleteActivityIndicator.stopAnimating()
+                    self.incompleteActivityIndicator.hidden = true
                     self.collectionView.reloadData()
                 }
             }
