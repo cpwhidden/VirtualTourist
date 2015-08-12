@@ -109,7 +109,6 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" red="0.91646971872874672" green="0.91646971872874672" blue="0.91646971872874672" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="centerY" secondItem="daA-8A-s2Y" secondAttribute="centerY" id="Pwh-UY-l2I"/>
                                             <constraint firstAttribute="centerX" secondItem="daA-8A-s2Y" secondAttribute="centerX" id="ZEK-hV-TwE"/>
