@@ -69,7 +69,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                                 sharedContext().deleteObject(photo)
                                 sharedContext().save(nil)
                             } else {
-                                // TODO: Can we do this more efficiently?  Only reload the data at the index path?
                                 self.collectionView.reloadData()
                             }
                         }
@@ -123,6 +122,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         } else {
             cell.activityIndicator.startAnimating()
             cell.activityIndicator.hidden = false
+            cell.backgroundView = nil
         }
         return cell
     }
@@ -164,8 +164,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     @IBAction func deleteSelectedPhotos(sender: UIBarButtonItem) {
         for index in collectionView.indexPathsForSelectedItems() {
-            collectionView.deselectItemAtIndexPath(index as! NSIndexPath, animated: true)
-            collectionView(collectionView, didDeselectItemAtIndexPath: index as! NSIndexPath)
+//            collectionView.deselectItemAtIndexPath(index as! NSIndexPath, animated: true)
+//            collectionView(collectionView, didDeselectItemAtIndexPath: index as! NSIndexPath)
             let row = index.row!
             let photo = pinAnnotation?.pin.pictures[row]
             sharedContext().deleteObject(photo!)
