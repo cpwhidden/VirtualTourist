@@ -34,10 +34,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let request = NSFetchRequest(entityName: "Pin")
         let pins = sharedContext().executeFetchRequest(request, error: nil) as! [Pin]
         for pin in pins {
-            let location = CLLocationCoordinate2DMake(pin.latitude, pin.longitude)
-            self.mapView.addPinAnnotationToCoordinate(location)
+            let pinAnnotation = PinAnnotation(pin: pin)
+            pinAnnotation.coordinate = CLLocationCoordinate2DMake(pin.latitude, pin.longitude)
+            mapView.addAnnotation(pinAnnotation)
         }
-        
     }
 
     override func didReceiveMemoryWarning() {
