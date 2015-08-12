@@ -26,7 +26,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
         
-        self.labelBottom.constant = -self.tapToDeleteLabel.bounds.height
+        labelBottom.constant = -tapToDeleteLabel.bounds.height
         mapView.addGestureRecognizer(longPressGestureRecognizer)
         longPressGestureRecognizer.addTarget(self, action: "longPressed:")
         
@@ -48,13 +48,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "toggleEdit:")
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "toggleEdit:")
+            tapToDeleteLabel.enabled = true
             UIView.animateWithDuration(0.3) {
                 self.labelBottom.constant = 0
                 self.tapToDeleteLabel.layoutIfNeeded()
             }
         } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "toggleEdit:")
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "toggleEdit:")
+            tapToDeleteLabel.enabled = false
             UIView.animateWithDuration(0.3) {
                 self.labelBottom.constant = -self.tapToDeleteLabel.bounds.height
                 self.tapToDeleteLabel.layoutIfNeeded()
@@ -94,12 +96,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         mapView.deselectAnnotation(view.annotation, animated: true)
         let annotation = view.annotation as! PinAnnotation
-        let pin = annotation.pin
-                
-        performSegueWithIdentifier("PhotosForPin", sender: annotation)
-        // Get image urls for pin location
-        // Perform segue to photo album view controller
-        // Assign pin to photo album view controller
+        if editing {
+            mapView.removeAnnotation(annotation)
+            let pin = annotation.pin
+            sharedContext().deleteObject(pin)
+        } else {
+            performSegueWithIdentifier("PhotosForPin", sender: annotation)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
