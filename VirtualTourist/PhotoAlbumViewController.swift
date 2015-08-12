@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var mapView: MKMapView!
@@ -18,12 +19,11 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     let columns = 3
     var pinAnnotation: PinAnnotation?
     var photos: [Photo]?
-    var photoStatus = PhotosStatus.Unknown
+    var photoStatus = PhotosStatus.Incomplete
     
     enum PhotosStatus {
-        case Unknown
-        case Some(Int)
-        case None
+        case Incomplete
+        case Done
     }
 
     override func viewDidLoad() {
@@ -39,6 +39,9 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
             photos = pinAnnotation.pin.pictures
             if photos!.count == 0 {
                 retrieveURLsForPinAnnotation(pinAnnotation)
+            } else {
+                photoStatus = .Done
+                collectionView.reloadData()
             }
         }
     }
@@ -47,30 +50,31 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         APIClient.sharedClient.taskForURLsWithPinAnnotation(pinAnnotation) { urls, error in
             if error != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.photoStatus = .None
                     let alert = UIAlertView(title: "Could not retrieve photos", message: "Photos cannot be retrieved at this time", delegate: nil, cancelButtonTitle: "OK")
                     alert.show()
+                    self.photoStatus = .Incomplete
                     self.collectionView.reloadData()
                 }
             } else {
-                var count = urls!.count
                 for (index, url) in enumerate(urls!) {
-                    let path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String + pinAnnotation.pin.latitude.description + "-" + pinAnnotation.pin.longitude.description + "-" + url.lastPathComponent!
+                    let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
+                    let path = "/" + pinAnnotation.pin.latitude.description.stringByReplacingOccurrencesOfString(".", withString: "_", options: .LiteralSearch, range: nil) + "-" + pinAnnotation.pin.longitude.description.stringByReplacingOccurrencesOfString(".", withString: "_", options: .LiteralSearch, range: nil) + "-" + url.lastPathComponent!
                     let dict = ["imagePath" : path, "pin" : pinAnnotation.pin]
                     let photo = Photo(dictionary: dict, context: sharedContext())
-                    APIClient.sharedClient.downloadImageURL(url, toPath: path) { success, error in
-                        if error != nil {
-                            count--
-                            sharedContext().deleteObject(photo)
+                    APIClient.sharedClient.downloadImageURL(url, toPath: (docPath + path)) { success, error in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            if error != nil {
+                                sharedContext().deleteObject(photo)
+                                sharedContext().save(nil)
+                            } else {
+                                // TODO: Can we do this more efficiently?  Only reload the data at the index path?
+                                self.collectionView.reloadData()
+                            }
                         }
                     }
                 }
                 dispatch_async(dispatch_get_main_queue()) {
-                    if count > 0 {
-                        self.photoStatus = .Some(count)
-                    } else {
-                        self.photoStatus = .None
-                    }
+                    self.photoStatus = .Done
                     self.collectionView.reloadData()
                 }
             }
@@ -89,19 +93,35 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch photoStatus {
-        case .Unknown:
-            noImageLabel.hidden = false
-            return 0
-        case .None:
+        case .Incomplete:
             noImageLabel.hidden = true
             return 0
-        case let .Some(i):
-            return i
+        case .Done:
+            let photos = pinAnnotation?.pin.pictures
+            if let cellCount = photos?.count where cellCount > 0 {
+                noImageLabel.hidden = true
+                return cellCount
+            } else {
+                noImageLabel.hidden = false
+                return 0
+            }
         }
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! UICollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoCollectionViewCell
+        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
+        let imagePath = pinAnnotation?.pin.pictures[indexPath.row].imagePath
+        if let imagePath = imagePath,
+           let image = UIImage(contentsOfFile: (docPath + imagePath)) {
+            cell.activityIndicator.stopAnimating()
+            cell.activityIndicator.hidden = true
+            let imageView = UIImageView(image: image)
+            cell.backgroundView = imageView
+        } else {
+            cell.activityIndicator.startAnimating()
+            cell.activityIndicator.hidden = false
+        }
         return cell
     }
     

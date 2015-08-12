@@ -92,10 +92,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+        mapView.deselectAnnotation(view.annotation, animated: true)
         let annotation = view.annotation as! PinAnnotation
         let pin = annotation.pin
-        
-        
+                
         performSegueWithIdentifier("PhotosForPin", sender: annotation)
         // Get image urls for pin location
         // Perform segue to photo album view controller

@@ -14,7 +14,7 @@ import CoreData
 class Pin: NSManagedObject {
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
-    @NSManaged var pictures: [Photo]?
+    @NSManaged var pictures: [Photo]
 
     struct Keys {
         static let latitude = "latitude"
