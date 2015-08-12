@@ -32,7 +32,7 @@ class Photo: NSManagedObject {
         context.save(nil)
     }
     
-    deinit {
+    override func prepareForDeletion() {
         let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
         let fullPath = docPath + imagePath
         NSFileManager.defaultManager().removeItemAtPath(fullPath, error: nil)
