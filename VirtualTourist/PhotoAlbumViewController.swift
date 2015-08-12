@@ -127,12 +127,11 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
            let image = UIImage(contentsOfFile: (docPath + imagePath)) {
             cell.activityIndicator.stopAnimating()
             cell.activityIndicator.hidden = true
-            let imageView = UIImageView(image: image)
-            cell.backgroundView = imageView
+            cell.imageView.image = image
         } else {
             cell.activityIndicator.startAnimating()
             cell.activityIndicator.hidden = false
-            cell.backgroundView = nil
+            cell.imageView.image = nil
         }
         return cell
     }
@@ -164,6 +163,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
 
     @IBAction func refresh(sender: UIBarButtonItem) {
         photoStatus = .Incomplete
+        incompleteActivityIndicator.startAnimating()
+        incompleteActivityIndicator.hidden = false
+        for index in collectionView.indexPathsForSelectedItems() {
+            collectionView.deselectItemAtIndexPath(index as! NSIndexPath, animated: true)
+            collectionView(collectionView, didDeselectItemAtIndexPath: index as! NSIndexPath)
+        }
         for photo in pinAnnotation!.pin.pictures {
             sharedContext().deleteObject(photo)
         }
@@ -174,15 +179,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     @IBAction func deleteSelectedPhotos(sender: UIBarButtonItem) {
         for index in collectionView.indexPathsForSelectedItems() {
-//            collectionView.deselectItemAtIndexPath(index as! NSIndexPath, animated: true)
-//            collectionView(collectionView, didDeselectItemAtIndexPath: index as! NSIndexPath)
             let row = index.row!
             let photo = pinAnnotation?.pin.pictures[row]
             sharedContext().deleteObject(photo!)
             sharedContext().save(nil)
             collectionView.deleteItemsAtIndexPaths([index as! NSIndexPath])
         }
-        //collectionView.reloadData()
     }
     /*
     // MARK: - Navigation
