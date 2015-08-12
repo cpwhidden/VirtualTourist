@@ -29,7 +29,12 @@ class APIClient: NSObject {
                 
                 if let results = json["photos"] as? [String:AnyObject],
                     let photos = results["photo"] as? [[String:AnyObject]] {
-                        let urls = map(photos) { (photo: [String:AnyObject]) -> NSURL in
+                        let total = (results["total"] as! String).toInt()!
+                        var slice = photos
+                        slice.shuffle()
+                        let max = min(21, total)
+                        slice = Array(slice[0..<max])
+                        let urls = map(slice) { (photo: [String:AnyObject]) -> NSURL in
                             let urlString = photo[APIConstants.urlExtra] as! String
                             return NSURL(string: urlString)!
                         }
@@ -94,7 +99,17 @@ struct APIConstants {
 
 struct SearchMethod {
     static let searchPhotos = "flickr.photos.search"
-    static let maxReturnedPhotos = 4000
-    static let perPage = 21
+    static let maxReturnedPhotos = 500
+    static let perPage = 500
     
+}
+
+extension Array {
+    mutating func shuffle() {
+        if count < 2 { return }
+        for i in 0..<(count - 1) {
+            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+            swap(&self[i], &self[j])
+        }
+    }
 }
