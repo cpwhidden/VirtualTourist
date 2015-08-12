@@ -14,6 +14,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var noImageLabel: UILabel!
+    @IBOutlet weak var trashButton: UIBarButtonItem!
     
     let spacing: CGFloat = 6.0
     let columns = 3
@@ -30,6 +31,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.allowsMultipleSelection = true
         // Do any additional setup after loading the view.
         
         if let pinAnnotation = pinAnnotation {
@@ -134,7 +136,44 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return spacing
     }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCollectionViewCell
+        cell.alpha = 0.4
+        trashButton.enabled = true
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCollectionViewCell
+        cell.alpha = 1.0
+        if collectionView.indexPathsForSelectedItems().count == 0 {
+            trashButton.enabled = false
+        }
+    }
+    
 
+    @IBAction func refresh(sender: UIBarButtonItem) {
+        photoStatus = .Incomplete
+        for photo in pinAnnotation!.pin.pictures {
+            sharedContext().deleteObject(photo)
+        }
+        collectionView.reloadData()
+        retrieveURLsForPinAnnotation(pinAnnotation!)
+    }
+    
+    
+    @IBAction func deleteSelectedPhotos(sender: UIBarButtonItem) {
+        for index in collectionView.indexPathsForSelectedItems() {
+            collectionView.deselectItemAtIndexPath(index as! NSIndexPath, animated: true)
+            collectionView(collectionView, didDeselectItemAtIndexPath: index as! NSIndexPath)
+            let row = index.row!
+            let photo = pinAnnotation?.pin.pictures[row]
+            sharedContext().deleteObject(photo!)
+            sharedContext().save(nil)
+            collectionView.deleteItemsAtIndexPaths([index as! NSIndexPath])
+        }
+        //collectionView.reloadData()
+    }
     /*
     // MARK: - Navigation
 

@@ -16,13 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Pq1-a1-SpW">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="cSv-zt-oP0" appends="YES" id="Mst-hR-wxy"/>
-                                </connections>
-                            </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pins to Delete" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fzf-3X-PFw">
                                 <rect key="frame" x="0.0" y="540" width="600" height="60"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -33,6 +26,13 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Pq1-a1-SpW">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="cSv-zt-oP0" appends="YES" id="Mst-hR-wxy"/>
+                                </connections>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -85,15 +85,7 @@
                                     <constraint firstAttribute="height" constant="135" id="dn2-WY-3Cs"/>
                                 </constraints>
                             </mapView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gWc-tu-hjf">
-                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
-                                <items>
-                                    <barButtonItem systemItem="refresh" id="DeX-op-uMY"/>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="vuw-cu-d7c"/>
-                                    <barButtonItem systemItem="trash" id="lFM-CC-rVV"/>
-                                </items>
-                            </toolbar>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="whc-3m-Kiq">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="whc-3m-Kiq">
                                 <rect key="frame" x="0.0" y="199" width="600" height="401"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uua-dE-J55">
@@ -116,7 +108,8 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="0.83529411760000005" green="0.85098039219999999" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.91646971872874672" green="0.91646971872874672" blue="0.91646971872874672" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="centerY" secondItem="daA-8A-s2Y" secondAttribute="centerY" id="Pwh-UY-l2I"/>
                                             <constraint firstAttribute="centerX" secondItem="daA-8A-s2Y" secondAttribute="centerX" id="ZEK-hV-TwE"/>
@@ -128,38 +121,52 @@
                                 </cells>
                             </collectionView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no images for this pin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0q5-1h-lXN">
-                                <rect key="frame" x="175" y="239" width="249" height="20.5"/>
+                                <rect key="frame" x="176" y="239" width="249" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I4k-Hm-X79">
+                                <rect key="frame" x="-1" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem systemItem="refresh" id="aPH-O1-2dE">
+                                        <connections>
+                                            <action selector="refresh:" destination="aDO-Rc-s8y" id="ogP-R3-e18"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="JjX-ue-ing"/>
+                                    <barButtonItem enabled="NO" systemItem="trash" id="fAu-89-9MY">
+                                        <connections>
+                                            <action selector="deleteSelectedPhotos:" destination="aDO-Rc-s8y" id="SdJ-2L-JtN"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="whc-3m-Kiq" firstAttribute="leading" secondItem="hfI-OF-c4C" secondAttribute="leading" id="DEm-AG-LTv"/>
-                            <constraint firstItem="hfI-OF-c4C" firstAttribute="trailing" secondItem="whc-3m-Kiq" secondAttribute="trailing" id="H28-8I-MYl"/>
-                            <constraint firstItem="gWc-tu-hjf" firstAttribute="leading" secondItem="whc-3m-Kiq" secondAttribute="leading" id="KYP-ah-GAG"/>
-                            <constraint firstItem="whc-3m-Kiq" firstAttribute="top" secondItem="hfI-OF-c4C" secondAttribute="bottom" id="TmI-ac-4lc"/>
-                            <constraint firstItem="whc-3m-Kiq" firstAttribute="bottom" secondItem="MJJ-eA-Gp0" secondAttribute="top" id="VX2-Eg-gtv"/>
-                            <constraint firstItem="whc-3m-Kiq" firstAttribute="top" secondItem="0q5-1h-lXN" secondAttribute="top" constant="-40" id="Zkk-hw-GHI"/>
-                            <constraint firstItem="gWc-tu-hjf" firstAttribute="trailing" secondItem="whc-3m-Kiq" secondAttribute="trailing" id="aGm-ll-iXh"/>
+                            <constraint firstItem="0q5-1h-lXN" firstAttribute="top" secondItem="hfI-OF-c4C" secondAttribute="bottom" constant="40" id="8Hj-bh-NGh"/>
+                            <constraint firstItem="I4k-Hm-X79" firstAttribute="trailing" secondItem="whc-3m-Kiq" secondAttribute="trailing" constant="-1" id="8IB-CQ-SZu"/>
+                            <constraint firstItem="whc-3m-Kiq" firstAttribute="leading" secondItem="hfI-OF-c4C" secondAttribute="leading" id="DUA-HY-grm"/>
+                            <constraint firstItem="whc-3m-Kiq" firstAttribute="top" secondItem="hfI-OF-c4C" secondAttribute="bottom" id="IrI-r7-HDh"/>
+                            <constraint firstItem="MJJ-eA-Gp0" firstAttribute="top" secondItem="I4k-Hm-X79" secondAttribute="bottom" id="Kwl-rD-Dz1"/>
+                            <constraint firstItem="whc-3m-Kiq" firstAttribute="bottom" secondItem="MJJ-eA-Gp0" secondAttribute="top" id="Q07-ez-KNC"/>
                             <constraint firstAttribute="centerX" secondItem="0q5-1h-lXN" secondAttribute="centerX" id="coH-KA-hH2"/>
+                            <constraint firstItem="whc-3m-Kiq" firstAttribute="trailing" secondItem="hfI-OF-c4C" secondAttribute="trailing" id="dKh-qB-l7A"/>
                             <constraint firstItem="hfI-OF-c4C" firstAttribute="top" secondItem="hAB-7k-rcE" secondAttribute="bottom" id="hv3-pi-iv2"/>
-                            <constraint firstItem="gWc-tu-hjf" firstAttribute="bottom" secondItem="MJJ-eA-Gp0" secondAttribute="top" id="ilP-hJ-vp5"/>
-                            <constraint firstItem="whc-3m-Kiq" firstAttribute="leading" secondItem="ml7-Dw-NcF" secondAttribute="leading" id="kPa-cc-bNL"/>
                             <constraint firstAttribute="trailing" secondItem="hfI-OF-c4C" secondAttribute="trailing" id="mNy-ct-hON"/>
+                            <constraint firstItem="I4k-Hm-X79" firstAttribute="leading" secondItem="whc-3m-Kiq" secondAttribute="leading" constant="-1" id="pMv-mH-8fm"/>
+                            <constraint firstItem="whc-3m-Kiq" firstAttribute="centerX" secondItem="0q5-1h-lXN" secondAttribute="centerX" id="wHb-xG-Mah"/>
                         </constraints>
                     </view>
                     <toolbarItems>
-                        <barButtonItem systemItem="refresh" id="PeG-LD-K5c"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="qWR-eR-e9o"/>
-                        <barButtonItem enabled="NO" systemItem="trash" id="nym-cm-R9c"/>
+                        <barButtonItem title="Item" id="YcY-uq-Whk"/>
                     </toolbarItems>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="whc-3m-Kiq" id="1v0-yl-sqt"/>
                         <outlet property="mapView" destination="hfI-OF-c4C" id="J1U-lf-EqG"/>
                         <outlet property="noImageLabel" destination="0q5-1h-lXN" id="tKm-hB-U4f"/>
+                        <outlet property="trashButton" destination="fAu-89-9MY" id="f7z-Wl-wpL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G4l-Hj-kdB" userLabel="First Responder" sceneMemberID="firstResponder"/>
