@@ -178,12 +178,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     
     @IBAction func deleteSelectedPhotos(sender: UIBarButtonItem) {
-        for index in collectionView.indexPathsForSelectedItems() {
-            let row = index.row!
+        while let index = collectionView.indexPathsForSelectedItems().first as? NSIndexPath {
+            let row = index.row
             let photo = pinAnnotation?.pin.pictures[row]
             sharedContext().deleteObject(photo!)
             sharedContext().save(nil)
-            collectionView.deleteItemsAtIndexPaths([index as! NSIndexPath])
+            collectionView.deleteItemsAtIndexPaths([index])
         }
     }
     /*
