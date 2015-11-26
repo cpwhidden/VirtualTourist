@@ -29,12 +29,18 @@ class Photo: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         imagePath = dictionary[Keys.imagePath] as! String
         pin = dictionary[Keys.pin] as? Pin
-        context.save(nil)
+        do {
+            try context.save()
+        } catch _ {
+        }
     }
     
     override func prepareForDeletion() {
-        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
+        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!
         let fullPath = docPath + imagePath
-        NSFileManager.defaultManager().removeItemAtPath(fullPath, error: nil)
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(fullPath)
+        } catch _ {
+        }
     }
 }

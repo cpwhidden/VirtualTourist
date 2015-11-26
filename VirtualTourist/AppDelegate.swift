@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     lazy var managedObjectContext: NSManagedObjectContext = {
-        let context = NSManagedObjectContext()
+        let context = NSManagedObjectContext(concurrencyType: NSManagedObjectContextConcurrencyType.MainQueueConcurrencyType)
         context.persistentStoreCoordinator = self.persistentStoreCoordinator
         return context
     }()
@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent(self.sqlStore)
-        let store = coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: nil)
+        let store = try? coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
         if store == nil {
             abort()
         }
@@ -67,13 +67,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     lazy var applicationDocumentsDirectory: NSURL = {
         let fileManager = NSFileManager.defaultManager()
-        return fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
+        return fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
     }()
     
     func saveContext() {
-        var error: NSError? = nil
-        if managedObjectContext.hasChanges && managedObjectContext.save(&error) {
-            abort()
+        if managedObjectContext.hasChanges {
+            try! managedObjectContext.save()
         }
     }
 }

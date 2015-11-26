@@ -58,16 +58,16 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         APIClient.sharedClient.taskForURLsWithPinAnnotation(pinAnnotation) { urls, error in
             if error != nil {
                 dispatch_async(dispatch_get_main_queue()) {
-                    let alert = UIAlertView(title: "Could not retrieve photos", message: "Photos cannot be retrieved at this time", delegate: nil, cancelButtonTitle: "OK")
-                    alert.show()
+                    let alert = UIAlertController(title: "Could not retrieve photos", message: "Photos cannot be retrieved at this time", preferredStyle: UIAlertControllerStyle.Alert)
+                    self.presentViewController(alert, animated: true, completion: nil)
                     self.photoStatus = .Done
                     self.incompleteActivityIndicator.stopAnimating()
                     self.incompleteActivityIndicator.hidden = true
                     self.collectionView.reloadData()
                 }
             } else {
-                for (index, url) in enumerate(urls!) {
-                    let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
+                for (_, url) in (urls!).enumerate() {
+                    let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!
                     let path = "/" + pinAnnotation.pin.latitude.description.stringByReplacingOccurrencesOfString(".", withString: "_", options: .LiteralSearch, range: nil) + "-" + pinAnnotation.pin.longitude.description.stringByReplacingOccurrencesOfString(".", withString: "_", options: .LiteralSearch, range: nil) + "-" + url.lastPathComponent!
                     let dict = ["imagePath" : path, "pin" : pinAnnotation.pin]
                     let photo = Photo(dictionary: dict, context: sharedContext())
@@ -75,7 +75,10 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
                         dispatch_async(dispatch_get_main_queue()) {
                             if error != nil {
                                 sharedContext().deleteObject(photo)
-                                sharedContext().save(nil)
+                                do {
+                                    try sharedContext().save()
+                                } catch _ {
+                                }
                             } else {
                                 self.collectionView.reloadData()
                             }
@@ -121,7 +124,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoCollectionViewCell
-        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first as! String
+        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!
         let imagePath = pinAnnotation?.pin.pictures[indexPath.row].imagePath
         if let imagePath = imagePath,
            let image = UIImage(contentsOfFile: (docPath + imagePath)) {
@@ -155,7 +158,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCollectionViewCell
         cell.alpha = 1.0
-        if collectionView.indexPathsForSelectedItems().count == 0 {
+        if collectionView.indexPathsForSelectedItems() != nil {
             trashButton.enabled = false
         }
     }
@@ -165,9 +168,11 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         photoStatus = .Incomplete
         incompleteActivityIndicator.startAnimating()
         incompleteActivityIndicator.hidden = false
-        for index in collectionView.indexPathsForSelectedItems() {
-            collectionView.deselectItemAtIndexPath(index as! NSIndexPath, animated: true)
-            collectionView(collectionView, didDeselectItemAtIndexPath: index as! NSIndexPath)
+        if let indexPaths = collectionView.indexPathsForSelectedItems() {
+            for index in indexPaths {
+                collectionView.deselectItemAtIndexPath(index, animated: true)
+                collectionView(collectionView, didDeselectItemAtIndexPath: index)
+            }
         }
         for photo in pinAnnotation!.pin.pictures {
             sharedContext().deleteObject(photo)
@@ -178,11 +183,14 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     
     @IBAction func deleteSelectedPhotos(sender: UIBarButtonItem) {
-        while let index = collectionView.indexPathsForSelectedItems().first as? NSIndexPath {
+        while let index = collectionView.indexPathsForSelectedItems()?.first {
             let row = index.row
             let photo = pinAnnotation?.pin.pictures[row]
             sharedContext().deleteObject(photo!)
-            sharedContext().save(nil)
+            do {
+                try sharedContext().save()
+            } catch _ {
+            }
             collectionView.deleteItemsAtIndexPaths([index])
         }
     }

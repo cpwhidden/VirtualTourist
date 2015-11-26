@@ -15,7 +15,7 @@ class APIClient: NSObject {
     
     private override init() {}
     
-    func taskForURLsWithParameters(var parameters: [String:String], completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
+    func taskForURLsWithParameters(parameters: [String:String], completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
         let urlString = APIConstants.baseURL + "?" + escapedParameters(parameters)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
@@ -24,23 +24,22 @@ class APIClient: NSObject {
             if let error = error {
                 completionHandler(urls: nil, error: error)
             } else {
-                var jsonError: NSError? = nil
-                let json = NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments, error: &jsonError) as! NSDictionary
+                let json = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)) as! NSDictionary
                 
                 if let results = json["photos"] as? [String:AnyObject],
                     let photos = results["photo"] as? [[String:AnyObject]] {
-                        let total = (results["total"] as! String).toInt()!
+                        let total = Int((results["total"] as! String))!
                         var slice = photos
                         slice.shuffle()
                         let max = min(21, total)
                         slice = Array(slice[0..<max])
-                        let urls = map(slice) { (photo: [String:AnyObject]) -> NSURL in
+                        let urls = slice.map { (photo: [String:AnyObject]) -> NSURL in
                             let urlString = photo[APIConstants.urlExtra] as! String
                             return NSURL(string: urlString)!
                         }
                         completionHandler(urls: urls, error: nil)
                 } else {
-                    completionHandler(urls: nil, error: jsonError)
+                    completionHandler(urls: nil, error: nil)
                 }
             }
         }
@@ -49,7 +48,6 @@ class APIClient: NSObject {
     }
     
     func taskForURLsWithPinAnnotation(pinAnnotation: PinAnnotation, completionHandler: (urls: [NSURL]?, error: NSError?) -> Void) -> NSURLSessionTask {
-        let pin = pinAnnotation.pin
         
         let params = [
             "method" : SearchMethod.searchPhotos,
@@ -72,7 +70,7 @@ class APIClient: NSObject {
             if let error = error {
                 completionHandler(success: false, error: error)
             } else {
-                let data = NSData(contentsOfURL: url)!
+                let data = NSData(contentsOfURL: url!)!
                 data.writeToFile(path, atomically: true)
                 completionHandler(success: true, error: nil)
             }
@@ -81,7 +79,7 @@ class APIClient: NSObject {
     }
     
     func escapedParameters(dictionary: [String:String]) -> String {
-        let queryItems = map(dictionary) {
+        let queryItems = dictionary.map {
             NSURLQueryItem(name: $0, value: $1)
         }
         let comps = NSURLComponents()

@@ -30,9 +30,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.addGestureRecognizer(longPressGestureRecognizer)
         longPressGestureRecognizer.addTarget(self, action: "longPressed:")
         
-        let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: sharedContext())!
         let request = NSFetchRequest(entityName: "Pin")
-        let pins = sharedContext().executeFetchRequest(request, error: nil) as! [Pin]
+        let pins = (try! sharedContext().executeFetchRequest(request)) as! [Pin]
         for pin in pins {
             let pinAnnotation = PinAnnotation(pin: pin)
             pinAnnotation.coordinate = CLLocationCoordinate2DMake(pin.latitude, pin.longitude)
@@ -80,20 +79,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         case .Changed:
             tempPinAnnotation!.coordinate = mapView.convertPoint(point, toCoordinateFromView: mapView)
         case .Cancelled:
-            mapView.removeAnnotation(tempPinAnnotation)
+            mapView.removeAnnotation(tempPinAnnotation!)
             tempPinAnnotation = nil
         default:
             tempPinAnnotation = nil
         }
     }
     
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         let view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
         view.animatesDrop = true
         return view
     }
     
-    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         mapView.deselectAnnotation(view.annotation, animated: true)
         let annotation = view.annotation as! PinAnnotation
         if editing {
